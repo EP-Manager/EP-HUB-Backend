@@ -9,6 +9,7 @@ class RoleDropDownSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class RoleListSerializer(serializers.ModelSerializer):
+    name = serializers.CharField()
     updated_by = serializers.CharField(source='updated_by.get_full_name')
     created_by = serializers.CharField(source='created_by.get_full_name')
 

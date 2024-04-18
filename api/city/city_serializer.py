@@ -28,6 +28,7 @@ class CityCreateSerializer(serializers.ModelSerializer):
         return value
     
 class CityListSerializer(serializers.ModelSerializer):
+    name = serializers.CharField()
     district = serializers.CharField(source='district.name')
     updated_by = serializers.CharField(source='updated_by.get_full_name')
     created_by = serializers.CharField(source='created_by.get_full_name')
