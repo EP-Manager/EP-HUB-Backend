@@ -57,7 +57,7 @@ class Centre(models.Model):
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='centre_updated_by')
 
     class Meta:
-        ordering = ['city', 'name']
+        ordering = ['city']
 
 class UserCentreLink(models.Model):
     id = models.CharField(primary_key=True, max_length=36, default=uuid.uuid4, editable=False)
