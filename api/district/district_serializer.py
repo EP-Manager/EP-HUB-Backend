@@ -27,6 +27,7 @@ class DistrictCreateEditSerializer(serializers.ModelSerializer):
         return data
 
 class DistrictListSerializer(serializers.ModelSerializer):
+    name = serializers.CharField()
     updated_by = serializers.CharField(source='updated_by.get_full_name')
     created_by = serializers.CharField(source='created_by.get_full_name')
 
