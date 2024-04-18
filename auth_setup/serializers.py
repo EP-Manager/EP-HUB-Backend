@@ -16,8 +16,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-        # user_roles = user.user_role_link.all()
-        # token['roles'] = [user_role.role.name for user_role in user_roles]
+        user_roles = user.user_role_link.all()
+        token['roles'] = [user_role.role.name for user_role in user_roles]
         return token
 
 class UserRegisterSerializer(serializers.ModelSerializer):
