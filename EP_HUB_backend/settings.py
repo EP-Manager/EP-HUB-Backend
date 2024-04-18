@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'corsheaders',
     # custom apps
     'auth_setup',
+    'api',
 ]
 
 MIDDLEWARE = [
