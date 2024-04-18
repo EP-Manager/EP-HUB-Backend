@@ -8,9 +8,10 @@ from .manager import UserManager
 class User(AbstractUser, PermissionsMixin):
     username = None
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    email = models.EmailField(max_length=255, unique=True, verbose_name=_('Email Address'))
     first_name = models.CharField(max_length=255, verbose_name=_('First Name'))
     last_name = models.CharField(max_length=255, verbose_name=_('Last Name'))
+    email = models.EmailField(max_length=255, unique=True, verbose_name=_('Email Address'))
+    phone_number = models.CharField(max_length=10, unique=True, verbose_name=_('Phone Number'))
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
