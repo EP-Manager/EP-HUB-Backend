@@ -71,7 +71,7 @@ class UserCentreLink(models.Model):
     class Meta:
         ordering = ['centre']
 
-class Plastic_Types(models.Model):
+class Shop_Items(models.Model):
     id = models.CharField(max_length=36, primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=30, unique=True, blank=False)
     unit_price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
@@ -90,7 +90,7 @@ class Order(models.Model):
     )
 
     id = models.CharField(primary_key=True, max_length=36, default=uuid.uuid4, editable=False)
-    item = models.ForeignKey(Plastic_Types, on_delete=models.CASCADE)
+    item = models.ForeignKey(Shop_Items, on_delete=models.CASCADE)
     quantity = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
     status = models.CharField(max_length=30, blank=False, default='Pending')
