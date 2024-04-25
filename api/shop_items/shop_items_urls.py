@@ -8,7 +8,4 @@ urlpatterns = [
         path('update/<str:shop_items_id>/', Shop_Items_APIview.as_view(), name='shop_items_update'), #single patch
         path('delete/<str:shop_items_id>/', Shop_Items_APIview.as_view(), name='shop_items_delete'), #single delete
 
-        path('base-template/', Shop_Items_Base_Template_APIview.as_view(), name='shop_items_base_template'), #base template
-        path('bulk-import/', Shop_Items_Bulk_Import_APIview.as_view(), name='shop_items_bulk_import'), #bulk import
-
     ]
