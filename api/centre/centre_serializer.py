@@ -41,3 +41,72 @@ class CentreCreateSerializer(serializers.ModelSerializer):
         if not City.objects.filter(id=value).exists():
             raise serializers.ValidationError("City does not exist")
         return value
+    
+class UserCentreListSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.get_full_name')
+    centre = serializers.CharField(source='centre.city.name')
+    updated_by = serializers.CharField(source='updated_by.get_full_name')
+    created_by = serializers.CharField(source='created_by.get_full_name')
+
+    class Meta:
+        model = UserCentreLink
+        fields = '__all__'
+
+class UserCentreCreateSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(required=True)
+    centre = serializers.CharField(required=True)
+    
+    class Meta:
+        model = UserCentreLink
+        fields = ['user', 'centre']
+
+    def create(self, validated_data):
+        user_id = self.context["user_id"]
+
+        validated_data["user_id"] = validated_data.pop("user")
+        validated_data["centre_id"] = validated_data.pop("centre")
+        validated_data["created_by_id"] = user_id
+        validated_data["updated_by_id"] = user_id
+        user_centre = UserCentreLink.objects.create(**validated_data)
+        return user_centre
+    
+    def validate(self, data):
+        if UserCentreLink.objects.filter(user=data['user'], centre=data['centre']).exists():
+            raise serializers.ValidationError("User Centre already exists")
+        return data
+    
+    def validate_user(self, value):
+        if not User.objects.filter(id=value).exists():
+            raise serializers.ValidationError("User does not exist")
+        return value
+    
+    def validate_centre(self, value):
+        if not Centre.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Centre does not exist")
+        return value
+    
+class UserCentreUpdateSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(required=True)
+    centre = serializers.CharField(required=True)
+    
+    class Meta:
+        model = UserCentreLink
+        fields = ['user', 'centre']
+
+    def update(self, instance, validated_data):
+        user_id = self.context["user_id"]
+        instance.user_id = validated_data.pop("user")
+        instance.centre_id = validated_data.pop("centre")
+        instance.updated_by_id = user_id
+        instance.save()
+        return instance
+    
+    def validate_user(self, value):
+        if not User.objects.filter(id=value).exists():
+            raise serializers.ValidationError("User does not exist")
+        return value
+    
+    def validate_centre(self, value):
+        if not Centre.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Centre does not exist")
+        return value
