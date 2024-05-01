@@ -84,18 +84,13 @@ class Shop_Items(models.Model):
         ordering = ['name']
 
 class Order(models.Model):
-    ORDER_TYPES = (
-        ('BUY', 'Buy'),
-        ('SELL', 'Sell'),
-    )
-
     id = models.CharField(primary_key=True, max_length=36, default=uuid.uuid4, editable=False)
     item = models.ForeignKey(Shop_Items, on_delete=models.CASCADE)
     quantity = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
     status = models.CharField(max_length=30, blank=False, default='Pending')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    order_type = models.CharField(max_length=4, choices=ORDER_TYPES)
+    order_type = models.CharField(max_length=4, blank=False, default='Buy')
     delivery_person = models.ForeignKey(User, on_delete=models.CASCADE, related_name='order_delivery_person', null=True, blank=True)
     centre = models.ForeignKey(Centre, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
