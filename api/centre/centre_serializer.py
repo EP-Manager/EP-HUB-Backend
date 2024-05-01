@@ -5,10 +5,9 @@ from auth_setup.models import User
 class CentreDropDownSerializer(serializers.ModelSerializer):
     class Meta:
         model = Centre
-        fields = ['id', 'name']
+        fields = ['id', 'city']
 
 class CentreListSerializer(serializers.ModelSerializer):
-    name = serializers.CharField()
     city = serializers.CharField(source='city.name')
     updated_by = serializers.CharField(source='updated_by.get_full_name')
     created_by = serializers.CharField(source='created_by.get_full_name')
@@ -22,7 +21,7 @@ class CentreCreateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Centre
-        fields = ['name']
+        fields = ['city']
 
     def create(self, validated_data):
         user_id = self.context["user_id"]
@@ -34,7 +33,7 @@ class CentreCreateSerializer(serializers.ModelSerializer):
         return centre
     
     def validate(self, data):
-        if Centre.objects.filter(name=data['name'], city=data['city']).exists():
+        if Centre.objects.filter(city=data['city']).exists():
             raise serializers.ValidationError("Centre already exists")
         return data
     
@@ -44,20 +43,15 @@ class CentreCreateSerializer(serializers.ModelSerializer):
         return value
     
 class CentreUpdateSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(required=False)
     city = serializers.CharField(required=False)
     
     class Meta:
         model = Centre
-        fields = ['name', 'city']
+        fields = ['city']
     
     def update(self, instance, validated_data):
         user_id = self.context.get("user_id")
-        new_name = validated_data.get("name", instance.name)
         new_city = validated_data.get("city", instance.city_id)
-        if Centre.objects.filter(name=new_name, city=new_city).exists():
-            raise serializers.ValidationError("Centre already exists")
-        instance.name = new_name
         instance.city_id = new_city
         instance.updated_by_id = user_id
         instance.save()
