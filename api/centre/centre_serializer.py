@@ -41,23 +41,3 @@ class CentreCreateSerializer(serializers.ModelSerializer):
         if not City.objects.filter(id=value).exists():
             raise serializers.ValidationError("City does not exist")
         return value
-    
-class CentreUpdateSerializer(serializers.ModelSerializer):
-    city = serializers.CharField(required=False)
-    
-    class Meta:
-        model = Centre
-        fields = ['city']
-    
-    def update(self, instance, validated_data):
-        user_id = self.context.get("user_id")
-        new_city = validated_data.get("city", instance.city_id)
-        instance.city_id = new_city
-        instance.updated_by_id = user_id
-        instance.save()
-        return instance
-    
-    def validate_city(self, value):
-        if not City.objects.filter(id=value).exists():
-            raise serializers.ValidationError("City does not exist")
-        return value

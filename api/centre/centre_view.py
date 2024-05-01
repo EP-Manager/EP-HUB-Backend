@@ -35,18 +35,6 @@ class CentreAPIView(APIView):
         return CustomResponse(message="failed to create Centre", data=serializer.errors).failure_reponse()
     
     @allowed_roles([RoleList.ADMIN.value])
-    def patch(self, request, Centre_id):
-        user_id = get_user_id(request)
-        Centre = Centre.objects.filter(id=Centre_id).first()
-        if not Centre:
-            return CustomResponse(message="Centre does not exist").failure_reponse()
-        serializer = CentreUpdateSerializer(Centre, data=request.data, context={'request': request, 'user_id': user_id})
-        if serializer.is_valid():
-            serializer.save()
-            return CustomResponse(message="successfully updated Centre", data=serializer.data).success_response()
-        return CustomResponse(message="failed to update Centre", data=serializer.errors).failure_reponse()
-    
-    @allowed_roles([RoleList.ADMIN.value])
     def delete(self, request, Centre_id):
         Centre = Centre.objects.filter(id=Centre_id).first()
         if not Centre:
