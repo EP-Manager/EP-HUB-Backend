@@ -97,6 +97,7 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     order_type = models.CharField(max_length=4, choices=ORDER_TYPES)
     delivery_person = models.ForeignKey(User, on_delete=models.CASCADE, related_name='order_delivery_person', null=True, blank=True)
+    centre = models.ForeignKey(Centre, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_created_by')
