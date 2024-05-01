@@ -100,6 +100,14 @@ def generate_excel_template(sheet_names, filename, headers, column_widths, data_
 
     return FileResponse(BytesIO(new_file_object), as_attachment=True, filename=filename)
 
+class OrderType(Enum):
+    BUY = 'BUY'
+    SELL = 'SELL'
+
+    @classmethod
+    def get_all_values(cls):
+        return [member.value for member in cls]
+
 class OrderStatus(Enum):
     OPEN = 'open'
     DELIVERY_INPROGRESS = 'in_progress'
