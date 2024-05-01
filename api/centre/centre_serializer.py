@@ -17,7 +17,7 @@ class CentreListSerializer(serializers.ModelSerializer):
         model = Centre
         fields = '__all__'
 
-class CentreCreateEditSerializer(serializers.ModelSerializer):
+class CentreCreateSerializer(serializers.ModelSerializer):
     city = serializers.CharField(required=True)
     
     class Meta:

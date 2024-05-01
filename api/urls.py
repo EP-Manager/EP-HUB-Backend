@@ -8,5 +8,7 @@ urlpatterns = [
 
     path('shop_items/', include('api.shop_items.shop_items_urls')),
 
+    path('centre/', include('api.centre.centre_urls')),
+
     
 ]
