@@ -51,3 +51,38 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         if not Shop_Items.objects.filter(id=value).exists():
             raise serializers.ValidationError("Item does not exist")
         return value
+
+class OrderUpdateSerializer(serializers.ModelSerializer):
+    item = serializers.CharField(required=False)
+    quantity = serializers.DecimalField(max_digits=10, decimal_places=2, required=False)
+    total_price = serializers.DecimalField(max_digits=10, decimal_places=2, required=False)
+    delivery_person = serializers.CharField(required=False)
+        
+    class Meta:
+        model = Order
+        fields = ['item', 'quantity', 'total_price', 'status', 'order_type', 'delivery_person']
+
+    def update(self, instance, validated_data):
+        user_id = self.context.get("user_id")
+        
+        instance.item = validated_data.get("item", instance.item)
+        instance.quantity = validated_data.get("quantity", instance.quantity)
+        instance.total_price = validated_data.get("total_price", instance.total_price)
+        instance.status = validated_data.get("status", instance.status)
+        instance.order_type = validated_data.get("order_type", instance.order_type)
+        user_instance = User.objects.filter(id=validated_data.get("delivery_person")).first()
+        if user_instance:
+            instance.delivery_person = user_instance
+        instance.updated_by_id = user_id
+        instance.save()
+        return instance
+
+    def validate_delivery_person(self, value):
+        if value and not User.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Delivery Person does not exist")
+        return value
+    
+    def validate_item(self, value):
+        if value and not Shop_Items.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Item does not exist")
+        return value
