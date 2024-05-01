@@ -21,18 +21,19 @@ class ShopItemsCreateEditSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Shop_Items
-        fields = ['name']
+        fields = ['name', 'unit_price']
 
     def create(self, validated_data):
         user_id = self.context["user_id"]
         validated_data["created_by_id"] = user_id
         validated_data["updated_by_id"] = user_id
-        Shop_Items = Shop_Items.objects.create(**validated_data)
-        return Shop_Items
+        shop_Items = Shop_Items.objects.create(**validated_data)
+        return shop_Items
 
     def update(self, instance, validated_data):
         user_id = self.context.get("user_id")
         instance.name = validated_data.get("name", instance.name)
+        instance.unit_price = validated_data.get("unit_price", instance.unit_price)
         instance.updated_by_id = user_id
         instance.save()
         return instance
