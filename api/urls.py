@@ -11,5 +11,6 @@ urlpatterns = [
 
     path('centre/', include('api.centre.centre_urls')),
 
+    path('user/', include('api.user_endpoints.user_urls')),
     
 ]
