@@ -9,13 +9,13 @@ from .order_serializer import  OrderListSerializer, OrderCreateSerializer, Order
 class OrderAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def get(self, request):
         orders = Order.objects.all()
         serializer = OrderListSerializer(orders, many=True)
         return CustomResponse(message="successfully obtained Orders", data=serializer.data).success_response()
     
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def post(self, request):
         user_id = get_user_id(request)
         serializer = OrderCreateSerializer(data=request.data, context={'request': request, 'user_id': user_id})
@@ -25,7 +25,7 @@ class OrderAPIView(APIView):
             return CustomResponse(message="successfully created Order", data=serializer.data).success_response()
         return CustomResponse(message="failed to create Order", data=serializer.errors).failure_reponse()
     
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def patch(self, request, order_id):
         user_id = get_user_id(request)
         order = Order.objects.filter(id=order_id).first()
@@ -37,7 +37,7 @@ class OrderAPIView(APIView):
             return CustomResponse(message="successfully updated Order", data=serializer.data).success_response()
         return CustomResponse(message="failed to update Order", data=serializer.errors).failure_reponse()
     
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def delete(self, request, order_id):
         order = Order.objects.filter(id=order_id).first()
         if not order:

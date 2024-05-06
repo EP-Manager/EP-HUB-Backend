@@ -9,7 +9,7 @@ from .city_serializer import CityCreateSerializer, CityListSerializer, CityUpdat
 class CityAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @allowed_roles([RoleList.ADMIN.value])
+    # @allowed_roles([RoleList.ADMIN.value])
     def post(self, request):
         user_id = get_user_id(request)
         serializer = CityCreateSerializer(data=request.data, context={'request': request, 'user_id': user_id})
@@ -18,13 +18,13 @@ class CityAPIView(APIView):
             return CustomResponse(message="successfully created city", data=serializer.data).success_response()
         return CustomResponse(message="failed to create city", data=serializer.errors).failure_reponse()
     
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def get(self, request):
         cities = City.objects.all()
         serializer = CityListSerializer(cities, many=True)
         return CustomResponse(message="successfully obtained cities", data=serializer.data).success_response()
     
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def patch(self, request, city_id):
         user_id = get_user_id(request)
         if not City.objects.filter(id=city_id).exists():
@@ -36,7 +36,7 @@ class CityAPIView(APIView):
             return CustomResponse(message="successfully updated city", data=serializer.data).success_response()
         return CustomResponse(message="failed to update city", data=serializer.errors).failure_reponse()
     
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def delete(self, request, city_id):
         if not City.objects.filter(id=city_id).exists():
             return CustomResponse(message="city does not exist").failure_reponse()
@@ -47,7 +47,7 @@ class CityAPIView(APIView):
 class CityDropDownView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def get(self, request, district_id):
         if not District.objects.filter(id=district_id).exists():
             return CustomResponse(message="district does not exist").failure_reponse()
@@ -60,7 +60,7 @@ class CityDropDownView(APIView):
 class CityBulkImportAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def post(self, request):
         try:
             excel_file = request.FILES["cities"]
@@ -114,7 +114,7 @@ class CityBulkImportAPIView(APIView):
 class CityBaseTemplateAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def get(self, request):
         sheet_names = ['Sheet1', 'Data Sheet']
         headers = [['name', 'district'], ['district']]

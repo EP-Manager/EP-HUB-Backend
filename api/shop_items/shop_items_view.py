@@ -14,7 +14,7 @@ from .shop_items_serializer import ShopItemsDropDownSerizlizer, ShopItemsListSer
 class Shop_Items_DropdownAPIview(APIView):
     permission_classes = [IsAuthenticated]
 
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def get(self, request):
         shop_items = Shop_Items.objects.all()
         serializer = ShopItemsDropDownSerizlizer(shop_items, many=True)
@@ -23,13 +23,13 @@ class Shop_Items_DropdownAPIview(APIView):
 class Shop_Items_APIview(APIView):
     permission_classes = [IsAuthenticated]
 
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def get(self, request):
         shop_items = Shop_Items.objects.all()
         serializer = ShopItemsListSerializer(shop_items, many=True)
         return CustomResponse(message="successfully obtained blood groups", data=serializer.data).success_response()
     
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def post(self, request):
         user_id = get_user_id(request)
         serializer = ShopItemsCreateEditSerializer(data=request.data, context={'request': request, 'user_id': user_id})
@@ -38,7 +38,7 @@ class Shop_Items_APIview(APIView):
             return CustomResponse(message="successfully created blood group", data=serializer.data).success_response()
         return CustomResponse(message="failed to blood group", data=serializer.errors).failure_reponse()
     
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def patch(self, request, shop_items_id):
         user_id = get_user_id(request)
         if not Shop_Items.objects.filter(id=shop_items_id).exists():
@@ -50,7 +50,7 @@ class Shop_Items_APIview(APIView):
             return CustomResponse(message="successfully updated blood group", data=serializer.data).success_response()
         return CustomResponse(message="failed to update blood group", data=serializer.errors).failure_reponse()
     
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def delete(self, request, shop_items_id):
         if not Shop_Items.objects.filter(id=shop_items_id).exists():
             return CustomResponse(message="blood group not found").failure_reponse()
