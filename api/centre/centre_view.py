@@ -9,7 +9,7 @@ from .centre_serializer import  CentreListSerializer, CentreDropDownSerializer, 
 class CentreDropDownAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def get(self, request):
         centres = Centre.objects.all()
         serializer = CentreDropDownSerializer(centres, many=True)
@@ -18,13 +18,13 @@ class CentreDropDownAPIView(APIView):
 class CentreAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def get(self, request):
         centres = Centre.objects.all()
         serializer = CentreListSerializer(centres, many=True)
         return CustomResponse(message="successfully obtained Centres", data=serializer.data).success_response()
     
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def post(self, request):
         user_id = get_user_id(request)
         serializer = CentreCreateSerializer(data=request.data, context={'request': request, 'user_id': user_id})
@@ -34,7 +34,7 @@ class CentreAPIView(APIView):
             return CustomResponse(message="successfully created Centre", data=serializer.data).success_response()
         return CustomResponse(message="failed to create Centre", data=serializer.errors).failure_reponse()
     
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def delete(self, request, Centre_id):
         Centre = Centre.objects.filter(id=Centre_id).first()
         if not Centre:
@@ -45,13 +45,13 @@ class CentreAPIView(APIView):
 class UserCentreView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def get(self, request):
         user_centres = UserCentreLink.objects.all()
         serializer = UserCentreListSerializer(user_centres, many=True)
         return CustomResponse(message="successfully obtained User Centre", data=serializer.data).success_response()
     
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def post(self, request):
         user_id = get_user_id(request)
         serializer = UserCentreCreateSerializer(data=request.data, context={'request': request, 'user_id': user_id})
@@ -61,7 +61,7 @@ class UserCentreView(APIView):
             return CustomResponse(message="successfully created User Centre", data=serializer.data).success_response()
         return CustomResponse(message="failed to create User Centre", data=serializer.errors).failure_reponse()
     
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def patch(self, request, user_centre_id):
         user_id = get_user_id(request)
         user_centre = UserCentreLink.objects.filter(id=user_centre_id).first()
@@ -73,7 +73,7 @@ class UserCentreView(APIView):
             return CustomResponse(message="successfully updated User Centre", data=serializer.data).success_response()
         return CustomResponse(message="failed to update User Centre", data=serializer.errors).failure_reponse()
     
-    @allowed_roles([RoleList.ADMIN.value])
+    #@allowed_roles([RoleList.ADMIN.value])
     def delete(self, request, user_centre_id):
         user_centre = UserCentreLink.objects.filter(id=user_centre_id).first()
         if not user_centre:
