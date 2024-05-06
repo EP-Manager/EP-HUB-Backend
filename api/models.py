@@ -89,7 +89,7 @@ class Order(models.Model):
     quantity = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
     status = models.CharField(max_length=30, blank=False, default='Pending')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     order_type = models.CharField(max_length=4, blank=False, default='BUY')
     delivery_person = models.ForeignKey(User, on_delete=models.CASCADE, related_name='order_delivery_person', null=True, blank=True)
     centre = models.ForeignKey(Centre, on_delete=models.SET_NULL, null=True, blank=True)
