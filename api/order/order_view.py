@@ -4,7 +4,7 @@ from django.db import transaction
 
 from api.models import Order 
 from api.utils import CustomResponse, get_user_id, RoleList, allowed_roles, get_excel_data, generate_excel_template
-from .order_serializer import  OrderListSerializer, OrderCreateSerializer, OrderUpdateSerializer
+from .order_serializer import  OrderListSerializer, OrderCreateSerializer, OrderUpdateSerializer, OrderCountSerializer
 
 class OrderAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -44,3 +44,17 @@ class OrderAPIView(APIView):
             return CustomResponse(message="Order does not exist").failure_reponse()
         order.delete()
         return CustomResponse(message="successfully deleted Order").success_response()
+    
+class OrderCountAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, user_id):
+        orders = Order.objects.filter(user=user_id).select_related('user')
+        buy_count = orders.filter(order_type='BUY').count()
+        sell_count = orders.filter(order_type='SELL').count()
+        data = OrderCountSerializer({
+            "user": orders[0].user,
+            "buy_count": buy_count,
+            "sell_count": sell_count
+        }).data
+        return CustomResponse(message="successfully obtained Order count", data=data).success_response()    

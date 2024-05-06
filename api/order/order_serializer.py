@@ -88,3 +88,12 @@ class OrderUpdateSerializer(serializers.ModelSerializer):
         if value and not Shop_Items.objects.filter(id=value).exists():
             raise serializers.ValidationError("Item does not exist")
         return value
+    
+class OrderCountSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.get_full_name')
+    buy_count = serializers.IntegerField()
+    sell_count = serializers.IntegerField()
+
+    class Meta:
+        model = Order
+        fields = ['user', "buy_count", "sell_count"]
