@@ -15,10 +15,11 @@ class OrderListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrderCreateSerializer(serializers.ModelSerializer):
-    user = serializers.CharField(required=True)
+    user = serializers.CharField(required=False)
     item = serializers.CharField(required=True)
     delivery_person = serializers.CharField(required=False)
     centre = serializers.CharField(required=True)
+    order_type = serializers.CharField(required=True)
     
     class Meta:
         model = Order
@@ -27,7 +28,8 @@ class OrderCreateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user_id = self.context["user_id"]
 
-        validated_data["user_id"] = validated_data.pop("user")
+        # validated_data["user_id"] = validated_data.pop("user")
+        validated_data["user_id"] = user_id
         validated_data["item_id"] = validated_data.pop("item")
         if "delivery_person" in validated_data:
             validated_data["delivery_person_id"] = validated_data.pop("delivery_person")
