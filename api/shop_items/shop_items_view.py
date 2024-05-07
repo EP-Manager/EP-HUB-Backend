@@ -57,3 +57,14 @@ class Shop_Items_APIview(APIView):
         shop_items = Shop_Items.objects.get(id=shop_items_id)
         shop_items.delete()
         return CustomResponse(message="successfully deleted shop items").success_response()
+    
+class SingleShopItemAPIview(APIView):
+    permission_classes = [IsAuthenticated]
+
+    #@allowed_roles([RoleList.ADMIN.value])
+    def get(self, request, shop_item_id):
+        if not Shop_Items.objects.filter(id=shop_item_id).exists():
+            return CustomResponse(message="shop items not found").failure_reponse()
+        shop_items = Shop_Items.objects.get(id=shop_item_id)
+        serializer = ShopItemsListSerializer(shop_items)
+        return CustomResponse(message="successfully obtained shop items", data=serializer.data).success_response()
