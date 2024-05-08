@@ -45,6 +45,31 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         )
         return user
     
+class SuperUserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(max_length=128, min_length=8, write_only=True)
+    password2 = serializers.CharField(max_length=128, min_length=8, write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['email', 'phone_number', 'first_name', 'last_name', 'password', 'password2']
+
+    def validate(self, attrs):
+        password = attrs.get('password', '')
+        password2 = attrs.get('password2', '')
+        if password!= password2:
+            raise serializers.ValidationError({'passwords do not match'})
+        return attrs
+        
+    def create(self, validated_data):
+        user = User.objects.create_superuser(
+            email=validated_data['email'],
+            phone_number=validated_data['phone_number'],
+            first_name=validated_data.get('first_name'),
+            last_name=validated_data.get('last_name'),
+            password=validated_data.get('password')
+        )
+        return user
+    
 class LoginSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=255, min_length=6)
     password = serializers.CharField(max_length=128, min_length=8, write_only=True)
