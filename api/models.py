@@ -13,6 +13,9 @@ class Role(models.Model):
     class Meta:
         ordering = ['name']
 
+    def __str__(self):
+        return self.name
+
 class UserRoleLink(models.Model):
     id = models.CharField(primary_key=True, max_length=36, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_role_link')
@@ -25,6 +28,9 @@ class UserRoleLink(models.Model):
     class Meta:
         ordering = ['role']
 
+    def __str__(self):
+        return f"{self.user.get_full_name} - {self.role.name}"
+
 class District(models.Model):
     id = models.CharField(primary_key=True, max_length=36, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=30, unique=True, blank=False)
@@ -35,6 +41,9 @@ class District(models.Model):
 
     class Meta:
         ordering = ['name']
+
+    def __str__(self) -> str:
+        return self.name
 
 class City(models.Model):
     id = models.CharField(primary_key=True, max_length=36, default=uuid.uuid4, editable=False)
@@ -48,6 +57,9 @@ class City(models.Model):
     class Meta:
         ordering = ['district', 'name']
 
+    def __str__(self) -> str:
+        return f"{self.name} - {self.district.name}"
+
 class Centre(models.Model):
     id = models.CharField(primary_key=True, max_length=36, default=uuid.uuid4, editable=False)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
@@ -58,6 +70,9 @@ class Centre(models.Model):
 
     class Meta:
         ordering = ['city']
+
+    def __str__(self) -> str:
+        return f"{self.city.name} - {self.city.district.name}"
 
 class UserCentreLink(models.Model):
     id = models.CharField(primary_key=True, max_length=36, default=uuid.uuid4, editable=False)
@@ -71,6 +86,9 @@ class UserCentreLink(models.Model):
     class Meta:
         ordering = ['centre']
 
+    def __str__(self) -> str:
+        return f"{self.user.get_full_name} - {self.centre.city.name} - {self.centre.city.district.name}"
+
 class Shop_Items(models.Model):
     id = models.CharField(max_length=36, primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=30, unique=True, blank=False)
@@ -83,6 +101,9 @@ class Shop_Items(models.Model):
 
     class Meta:
         ordering = ['name']
+
+    def __str__(self) -> str:
+        return self.name
 
 class Order(models.Model):
     id = models.CharField(primary_key=True, max_length=36, default=uuid.uuid4, editable=False)
@@ -101,3 +122,6 @@ class Order(models.Model):
 
     class Meta:
         ordering = ['status', 'created_at']
+
+    def __str__(self) -> str:
+        return f"{self.user.get_full_name} - {self.item.name} - {self.quantity} - {self.total_price} - {self.status}"
