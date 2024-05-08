@@ -124,4 +124,4 @@ class Order(models.Model):
         ordering = ['status', 'created_at']
 
     def __str__(self) -> str:
-        return f"{self.user.get_full_name} - {self.item.name} - {self.quantity} - {self.total_price} - {self.status} - {self.delivery_person.email}"
+        return f"{self.user.get_full_name} - {self.item.name} - {self.quantity} - {self.total_price} - {self.status}"
