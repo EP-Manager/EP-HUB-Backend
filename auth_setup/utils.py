@@ -29,6 +29,6 @@ def send_normal_email(data):
         subject=data['email_subject'],
         body=data['email_body'],
         from_email=decouple.config("FROM_MAIL"),
-        to=[data['to_email']]
+        to=data['to_email']
     )
     email.send()
