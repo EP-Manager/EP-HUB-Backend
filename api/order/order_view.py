@@ -3,8 +3,10 @@ from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
 
 from api.models import Order 
+from auth_setup.models import User
 from api.utils import CustomResponse, get_user_id, RoleList, allowed_roles, get_excel_data, generate_excel_template
 from .order_serializer import  OrderListSerializer, OrderCreateSerializer, OrderUpdateSerializer, OrderCountSerializer
+from auth_setup.utils import send_normal_email
 
 class OrderAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -22,6 +24,13 @@ class OrderAPIView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            send_normal_email(
+                {
+                    "email_subject": "New Order Created",
+                    "email_body": f"Dear admin, user {serializer.data.get('user')} has created a new order. Update the status and assign a person for delivery",
+                    "to_email": [user.email for user in User.objects.filter(is_superuser=1)]
+                }
+            )
             return CustomResponse(message="successfully created Order", data=serializer.data).success_response()
         return CustomResponse(message="failed to create Order", data=serializer.errors).failure_reponse()
     
