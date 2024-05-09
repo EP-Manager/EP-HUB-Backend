@@ -91,6 +91,18 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": config("DATABASE_ENGINE"),
+#         "NAME": config("DATABASE_NAME"),
+#         "USER": config("DATABASE_USER"),
+#         "PASSWORD": config("DATABASE_PASSWORD"),
+#         "HOST": config("DATABASE_HOST"),
+#         "PORT": config("DATABASE_PORT"),
+#     }
+# }
+
 AUTH_USER_MODEL = "auth_setup.User"
 
 REST_FRAMEWORK = {

@@ -2,6 +2,8 @@ from django.db import models
 from auth_setup.models import User
 import uuid
 
+from auth_setup.utils import send_normal_email
+
 class Role(models.Model):
     id = models.CharField(primary_key=True, max_length=36, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=30, unique=True, blank=False)
@@ -44,6 +46,17 @@ class District(models.Model):
 
     def __str__(self) -> str:
         return self.name
+    
+    def save(self, *args, **kwargs):
+        is_new = not self.pk  # Check if the object is being created or updated
+        super().save(*args, **kwargs)  # Call the original save method
+
+        if not is_new:  # If the object is being updated
+            send_normal_email({
+                'email_subject': 'District Updated',
+                'email_body': f'The district "{self.name}" has been updated.',
+                'to_email': ['jeromjomanthara@gmail.com']
+            })
 
 class City(models.Model):
     id = models.CharField(primary_key=True, max_length=36, default=uuid.uuid4, editable=False)
@@ -125,3 +138,20 @@ class Order(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user.get_full_name} - {self.item.name} - {self.quantity} - {self.total_price} - {self.status}"
+    
+    def save(self, *args, **kwargs):
+        is_new = not self.pk  # Check if the object is being created or updated
+        super().save(*args, **kwargs)
+
+        if not is_new:
+            if self.delivery_person:
+                send_normal_email({
+                    'email_subject': 'Order Assigned',
+                    'email_body': f'You have been assigned an order for {self.item.name}.',
+                    'to_email': [self.delivery_person.email]
+                })
+            send_normal_email({
+                'email_subject': 'Order Updated',
+                'email_body': f'The order for {self.item.name} has been updated.',
+                'to_email': ['jeromjomanthara@gmail.com']
+            })
